@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, redirect, url_for
 from produto import Produto
+from dao import ProdutoDao
+
+
 
 #para instalar o flask por comando:
 #1.acessar o terminal
@@ -11,15 +13,8 @@ from produto import Produto
 #OU para instalar uma versão específica. Ex:
 # .\pip install flask=2.0.2
 
-p1 = Produto('TV LG 50"', 3999, 5)
-p2 = Produto('CELULAR Samsung', 1999, 10)
-p3 = Produto('Geladeira Brastemp', 1500, 3)
 
-#         0   1   2
-lista = [p1, p2, p3]
-print(p1)
-
-
+produto_dao = ProdutoDao('bancodados.db')
 
 
 #criar um app do flask
@@ -28,7 +23,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('relatorio.html', titulo='Relatório estoque', produtos=lista)
+    produto_dao.listar()
+    return render_template('relatorio.html', titulo='Relatório estoque', produtos=[])
 
 @app.route('/cadastrar')
 def cadastrar():
@@ -44,9 +40,10 @@ def salvar():
     descricao = request.form['descricao']
     preco = request.form['preco']
     quantidade = request.form['quantidade']
-    print(id, descricao, preco, quantidade)
-
-    return '<h1>Salvando....</h1>'
+    produto = Produto(descricao, preco, quantidade)
+    produto_dao.salvar(produto)
+    print(f'id retornado: {produto.id}')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

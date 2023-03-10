@@ -14,6 +14,7 @@ class Produto:
     def id(self):
         return self.__id
 
+    #propriedades somente para leitura
     @property
     def descricao(self):
         return self.__descricao
@@ -25,3 +26,21 @@ class Produto:
     @property
     def quantidade(self):
         return self.__quantidade
+
+    #propriedades somente para atribuição (setter)
+    @id.setter
+    def id(self, id):
+        self.__id = id
+
+    @descricao.setter
+    def descricao(self, descricao):
+        self.__descricao = descricao
+
+    @preco.setter
+    def preco(self,preco):
+        self.__preco = preco
+
+    @quantidade.setter
+    def quantidade(self,quantidade):
+        self.__quantidade = quantidade
+
